@@ -1,13 +1,15 @@
 const client = require('./client.js');
 const {createItem} = require('./items.js');
+const {createUser} = require('./users.js');
 
 const dropTables = async(req, res) => {
   try {
     await client.query(`
       DROP TABLE IF EXISTS items;
+      DROP TABLE IF EXISTS users;
     `);
   } catch(err) {
-    res.send(err);
+    console.log(err);
   }
 }
 
@@ -15,6 +17,12 @@ const createTables = async(req, res) => {
   try {
     // When users.js and corresponding table are created, add 'REFERENCES users(id)' to seller_id below.
     await client.query(`
+      CREATE TABLE users (
+        id SERIAL PRIMARY KEY,
+        username VARCHAR (30) UNIQUE NOT NULL,
+        password VARCHAR (60)
+        );
+
       CREATE TABLE items (
         id SERIAL PRIMARY KEY,
         name VARCHAR (30) NOT NULL,
@@ -28,7 +36,7 @@ const createTables = async(req, res) => {
         );
     `);
   } catch(err) {
-    res.send(err);
+    console.log(err);
   }
 }
 
@@ -39,6 +47,10 @@ const syncAndSeed = async() => {
   console.log('tables dropped');
   await createTables();
   console.log('tables created');
+  await createUser('testUser1', 'password1');
+  await createUser('bobjoe', 'thisisapass');
+  await createUser('gardener', 'gardenerRocks');
+  console.log('users created');
   await createItem(
     'Shovel', 7, 'Sacramento, CA', 2999,
     'https://media.istockphoto.com/id/1281644568/vector/shovel-shape-vector-icon-spade-symbol-cartoon-industrial-tool-logo-sign-silhouette-isolated.jpg?s=612x612&w=0&k=20&c=tx4uALD6qYG0gsg1GxsYZ7zEcYE3vfDF9knE3jPyBP0=',
