@@ -34,8 +34,11 @@ const createTables = async(req, res) => {
 
 const syncAndSeed = async() => {
   await client.connect();
+  console.log('connected');
   await dropTables();
+  console.log('tables dropped');
   await createTables();
+  console.log('tables created');
   await createItem(
     'Shovel', 7, 'Sacramento, CA', 2999,
     'https://media.istockphoto.com/id/1281644568/vector/shovel-shape-vector-icon-spade-symbol-cartoon-industrial-tool-logo-sign-silhouette-isolated.jpg?s=612x612&w=0&k=20&c=tx4uALD6qYG0gsg1GxsYZ7zEcYE3vfDF9knE3jPyBP0=',
@@ -48,6 +51,7 @@ const syncAndSeed = async() => {
   );
   console.log('items created');
   await client.end();
+  console.log('disconnected');
 }
 
 syncAndSeed();
