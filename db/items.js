@@ -19,4 +19,6 @@ const createItem = async(
   }
 }
 
-module.exports = createItem;
+module.exports = { 
+  createItem 
+}
