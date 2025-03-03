@@ -1,4 +1,4 @@
-const { createItem, fetchItems, categoryFetch, oneItem } = require('./db/items.js');
+const { createItem, fetchItems, typeFetch, oneItem } = require('./db/items.js');
 
 
 const client = require('./db/client.js');
@@ -27,15 +27,15 @@ app.get('/api/items', async(req, res) => {
     res.send(err.message);
   }
 });
-//ITEMS BY CATEGORY//
-app.get('/api/items/category/:category', async(req, res) => {
-  const { category } = req.params;
+//ITEMS BY type//
+app.get('/api/items/type/:type', async(req, res) => {
+  const { type } = req.params;
   try {
-    const itemCategory = await categoryFetch(category);
-    if (itemCategory === undefined || itemCategory.length == 0) {
+    const itemType = await typeFetch(type);
+    if (itemType === undefined || itemType.length == 0) {
       res.send('Nothing Here')
     }else{
-      res.send(itemCategory);
+      res.send(itemType);
     }
   } catch(err) {
     res.send(err.message);

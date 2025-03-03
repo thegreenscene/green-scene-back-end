@@ -30,17 +30,19 @@ const fetchItems = async() => {
   }
 }
 
-const categoryFetch = async(categoryName) => {
+const typeFetch = async(typeName) => {
   try {
-    if(categoryName!='sprout'&&categoryName!='seed'&&categoryName!='tool'){
-      throw new Error('Invalid Item Category');
+    if(typeName!='sprout' && typeName!='seed' && typeName!='tools'){
+      throw new Error('Invalid Item type');
     }
+    console.log('here')
     const {rows} = await client.query(`
-      SELECT * FROM items WHERE type=${categoryName};
+      SELECT * FROM items WHERE type='${typeName}';
     `);
     return rows;
   } catch (error) {
-    throw new Error('Bad Category Fetch')
+    console.log(error);
+    throw new Error('Bad type Fetch')
   }
 }
 
@@ -58,6 +60,6 @@ const oneItem = async(itemId) => {
 module.exports = {
   createItem,
   fetchItems,
-  categoryFetch,
+  typeFetch,
   oneItem
 };
