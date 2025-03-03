@@ -1,5 +1,5 @@
 const client = require('./client.js');
-const createItem = require('./items.js');
+const {createItem} = require('./items.js');
 
 const dropTables = async(req, res) => {
   try {
