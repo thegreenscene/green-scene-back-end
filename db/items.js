@@ -32,10 +32,9 @@ const fetchItems = async() => {
 
 const typeFetch = async(typeName) => {
   try {
-    if(typeName!='sprout' && typeName!='seed' && typeName!='tools'){
+    if(typeName!='sprouts' && typeName!='seeds' && typeName!='tools'){
       throw new Error('Invalid Item type');
     }
-    console.log('here')
     const {rows} = await client.query(`
       SELECT * FROM items WHERE type='${typeName}';
     `);
