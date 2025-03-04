@@ -7,7 +7,7 @@ const createOrder = async(itemId, buyerId, quantity) => {
       VALUES (${itemId}, ${buyerId}, 'cart', ${quantity})
       RETURNING *;
     `);
-    console.log('Order created!')
+    console.log(rows)
     return rows[0];
   } catch (error) {
     console.log(error)
@@ -42,10 +42,10 @@ const updateOrder = async(orderId, status) => {
   }
 }
 
-const deleteOrder = async(orderId) => {
+const deleteOrder = async(itemId, userId) => {
   try {
     await client.query(`
-      DELETE FROM orders WHERE id=${orderId};
+      DELETE FROM orders WHERE item_id=${itemId} AND buyer_id=${userId};
     `);
   } catch (error) {
     console.log(error);

@@ -1,6 +1,6 @@
 const { createItem, fetchItems, typeFetch, oneItem } = require('./db/items.js');
-const { loginUser, createUser } = require('./db/users.js');
-
+const { loginUser, validateUser, createUser } = require('./db/users.js');
+const { createOrder, fetchCart, updateOrder, deleteOrder} = require('./db/orders.js');
 
 const client = require('./db/client.js');
 client.connect();
@@ -60,7 +60,7 @@ app.get('/api/items/:id', async(req, res) => {
   }
 });
 
-//     USER Requests      //
+//     POST Requests      //
 //USER LOGIN 
 app.post('/api/auth/login', async (req, res) => {
   try{
@@ -70,6 +70,35 @@ app.post('/api/auth/login', async (req, res) => {
 } catch(err){
   res.send(err.message);
 }
+})
+//ADD TO CART
+app.post('/api/user/cart', async (req, res) => {
+  try {
+    const {itemId, quantity, token} = req.body;
+    const userData = await validateUser(token);
+    const order = await createOrder(itemId, userData.id, quantity);
+    if(order){
+      res.status(201).send(order);
+    }else{
+      throw new Error('A problem was encountered upon creation');
+    }
+  } catch (error) {
+    res.send(error.message);
+  }
+})
+
+
+//     DELETE Requests      //
+//Delete order
+app.delete('/api/user/cart', async (req, res) => {
+  try {
+    const {itemId, token} = req.body;
+    const userData = await validateUser(token);
+    await deleteOrder(itemId, userData.id);
+    res.status(200).send('Order Deleted!');
+  }catch (error) {
+    res.send(error.message);
+  }
 })
 
 app.post('/api/auth/register', async (req, res, next) => {
