@@ -5,11 +5,15 @@ const jwt = require('jsonwebtoken');
 const createUser = async (userName, password, userLocation) => {
 
   const hashedPW = await bcrypt.hash(password, 10);
-
-  await client.query(`
+  
+  const { rows } = await client.query(`
     INSERT INTO users (username, password, location)
-    VALUES ('${userName}', '${hashedPW}', '${userLocation}');
+    VALUES ('${userName}', '${hashedPW}', '${userLocation}')
+    RETURNING * ;
     `);
+
+    const createdUser = rows[0];
+    return createdUser;
 }
 
 const loginUser = async (inputUser, inputPassword) => {

@@ -1,5 +1,5 @@
 const { createItem, fetchItems, typeFetch, oneItem } = require('./db/items.js');
-const { loginUser } = require('./db/users.js');
+const { loginUser, createUser } = require('./db/users.js');
 
 
 const client = require('./db/client.js');
@@ -70,6 +70,16 @@ app.post('/api/auth/login', async (req, res) => {
 } catch(err){
   res.send(err.message);
 }
+})
+
+app.post('/api/auth/register', async (req, res, next) => {
+  try{
+    const { username, password, location } = req.body; 
+    const registeredUser = await createUser(username, password, location);
+    res.send(`${registeredUser.username} created successfully.`);
+  } catch (err) {
+    res.send(err.message);
+  }
 })
 
 app.listen(process.env.PORT, () => {
