@@ -1,7 +1,6 @@
 const { createItem, fetchItems, typeFetch, oneItem } = require('./db/items.js');
-const { loginUser, validateUser } = require('./db/users.js');
+const { loginUser, validateUser, createUser } = require('./db/users.js');
 const { createOrder, fetchCart, updateOrder, deleteOrder} = require('./db/orders.js');
-
 
 const client = require('./db/client.js');
 client.connect();
@@ -99,6 +98,16 @@ app.delete('/api/user/cart', async (req, res) => {
     res.status(200).send('Order Deleted!');
   }catch (error) {
     res.send(error.message);
+  }
+})
+
+app.post('/api/auth/register', async (req, res, next) => {
+  try{
+    const { username, password, location } = req.body; 
+    const registeredUser = await createUser(username, password, location);
+    res.send(`${registeredUser.username} created successfully.`);
+  } catch (err) {
+    res.send(err.message);
   }
 })
 
