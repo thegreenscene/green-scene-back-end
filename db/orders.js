@@ -8,7 +8,7 @@ const createOrder = async(itemId, buyerId, quantity) => {
       RETURNING *;
     `);
     console.log('Order created!')
-    return rows;
+    return rows[0];
   } catch (error) {
     console.log(error)
   }
