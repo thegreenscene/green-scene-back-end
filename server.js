@@ -77,17 +77,30 @@ app.post('/api/user/cart', async (req, res) => {
   try {
     const {itemId, quantity, token} = req.body;
     const userData = await validateUser(token);
-    const order = createOrder(itemId, userData.id, quantity);
+    const order = await createOrder(itemId, userData.id, quantity);
     if(order){
-      res.status(200).send(order);
+      res.status(201).send(order);
     }else{
       throw new Error('A problem was encountered upon creation');
     }
   } catch (error) {
-    req.send(error.message);
+    res.send(error.message);
   }
 })
 
+
+//     DELETE Requests      //
+//Delete order
+app.delete('/api/user/cart', async (req, res) => {
+  try {
+    const {itemId, token} = req.body;
+    const userData = await validateUser(token);
+    await deleteOrder(itemId, userData.id);
+    res.status(200).send('Order Deleted!');
+  }catch (error) {
+    res.send(error.message);
+  }
+})
 
 app.listen(process.env.PORT, () => {
   console.log(`listening on PORT ${process.env.PORT}`);

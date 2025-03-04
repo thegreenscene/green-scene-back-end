@@ -37,7 +37,7 @@ const validateUser = async (token) => {
   try {
     const userData = await jwt.verify(token, process.env.SECRET);
     const {rows} = await client.query(`
-      SELECT * FROM users WHERE username='${userData.username}';
+      SELECT * FROM users WHERE id='${userData.id}';
     `);
     const user = rows[0];
     if(user){
