@@ -12,7 +12,7 @@ const createItem = async(
       VALUES (
         '${itemName}', ${itemQuantity}, '${itemLocation}', ${itemPrice}, 
           '${itemImageUrl}', '${itemDescription}', '${itemType}', ${itemSellerId}
-      )
+      );
     `);
   } catch(err) {
     console.log(err);
@@ -61,4 +61,4 @@ module.exports = {
   fetchItems,
   typeFetch,
   oneItem
-};
+}
