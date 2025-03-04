@@ -32,7 +32,26 @@ const loginUser = async (inputUser, inputPassword) => {
     throw new Error('Bad Credentials');
   }
 }
+
+const validateUser = async (token) => {
+  try {
+    const userData = await jwt.verify(token, process.env.SECRET);
+    const {rows} = await client.query(`
+      SELECT * FROM users WHERE username='${userData.username}';
+    `);
+    const user = rows[0];
+    if(user){
+      return user;
+    }else{
+      throw new Error('Bad Token');
+    }
+  } catch (error) {
+    throw new Error('Bad Token');
+  }
+}
+
 module.exports = {
   createUser,
-  loginUser
+  loginUser,
+  validateUser
 }

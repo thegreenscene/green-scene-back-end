@@ -1,5 +1,6 @@
 const { createItem, fetchItems, typeFetch, oneItem } = require('./db/items.js');
-const { loginUser } = require('./db/users.js');
+const { loginUser, validateUser } = require('./db/users.js');
+const { createOrder, fetchCart, updateOrder, deleteOrder} = require('./db/orders.js');
 
 
 const client = require('./db/client.js');
@@ -60,7 +61,7 @@ app.get('/api/items/:id', async(req, res) => {
   }
 });
 
-//     USER Requests      //
+//     POST Requests      //
 //USER LOGIN 
 app.post('/api/auth/login', async (req, res) => {
   try{
@@ -71,6 +72,22 @@ app.post('/api/auth/login', async (req, res) => {
   res.send(err.message);
 }
 })
+//ADD TO CART
+app.post('/api/user/cart', async (req, res) => {
+  try {
+    const {itemId, quantity, token} = req.body;
+    const userData = await validateUser(token);
+    const order = createOrder(itemId, userData.id, quantity);
+    if(order){
+      res.status(200).send(order);
+    }else{
+      throw new Error('A problem was encountered upon creation');
+    }
+  } catch (error) {
+    req.send(error.message);
+  }
+})
+
 
 app.listen(process.env.PORT, () => {
   console.log(`listening on PORT ${process.env.PORT}`);

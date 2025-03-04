@@ -1,6 +1,7 @@
 const client = require('./client.js');
 const { createItem } = require('./items.js');
 const { createUser } = require('./users.js');
+const { createOrder,fetchCart,updateOrder } = require('./orders.js');
 
 const dropTables = async() => {
   try {
