@@ -1,4 +1,5 @@
 const { createItem, fetchItems, typeFetch, oneItem } = require('./db/items.js');
+const { loginUser } = require('./db/users.js');
 
 
 const client = require('./db/client.js');
@@ -58,6 +59,18 @@ app.get('/api/items/:id', async(req, res) => {
     res.send(err.message);
   }
 });
+
+//     USER Requests      //
+//USER LOGIN 
+app.post('/api/auth/login', async (req, res) => {
+  try{
+  const { username, password } = req.body; 
+  const authToken = await loginUser(username, password);
+  res.send({token: authToken});
+} catch(err){
+  res.send(err.message);
+}
+})
 
 app.listen(process.env.PORT, () => {
   console.log(`listening on PORT ${process.env.PORT}`);
