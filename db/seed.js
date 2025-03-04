@@ -1,10 +1,12 @@
 const client = require('./client.js');
 const { createItem } = require('./items.js');
 const { createUser } = require('./users.js');
+const { createReview } = require('./reviews.js');
 
 const dropTables = async() => {
   try {
     await client.query(`
+      DROP TABLE IF EXISTS reviews;
       DROP TABLE IF EXISTS orders;
       DROP TABLE IF EXISTS items;
       DROP TABLE IF EXISTS users;
@@ -40,7 +42,16 @@ const createTables = async() => {
         id SERIAL PRIMARY KEY,
         item_id INT REFERENCES items(id),
         buyer_id INT REFERENCES users(id),
-        status VARCHAR (30) NOT NULL
+        status VARCHAR (30) NOT NULL,
+        quantity INT NOT NULL
+      );
+
+      CREATE TABLE reviews (
+        id SERIAL PRIMARY KEY,
+        item_id INT REFERENCES items(id),
+        title VARCHAR (60),
+        description VARCHAR (250),
+        rating INT NOT NULL
       );
     `);
   } catch(err) {
@@ -90,6 +101,13 @@ const syncAndSeed = async() => {
     'Beans, beans, the magical fruit', 'seeds', 3
   );
   console.log('items created');
+  await createReview(1, 'This shovel sucks!', 'I, in fact, cannot dig it!', 1);
+  await createReview(2, 'Healthy bunnies eat these!', `My bunnys fur is so much fluffier!`, 10);
+  await createReview(3, 'Not as expected', 'disappointed', 1);
+  await createReview(4, 'Great deer food', 'The roses are beautiful but the deer ate them', 8);
+  await createReview(5, 'Car wax not included', 'beautiful tree!', 10);
+  await createReview(6, 'Look great, taste awful', 'If these beans were flowers they would be a 10', 4);
+  console.log('reviews created');
   await client.end();
   console.log('disconnected');
 }
