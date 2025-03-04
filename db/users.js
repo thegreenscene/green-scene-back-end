@@ -2,13 +2,13 @@ const client = require('./client.js');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const createUser = async (userName, password, location) => {
+const createUser = async (userName, password, userLocation) => {
 
   const hashedPW = await bcrypt.hash(password, 10);
 
   await client.query(`
-    INSERT INTO users(username, password, location)
-    VALUES ('${userName}', '${hashedPW}', '${location}');
+    INSERT INTO users (username, password, location)
+    VALUES ('${userName}', '${hashedPW}', '${userLocation}');
     `);
 }
 
