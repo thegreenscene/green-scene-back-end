@@ -85,6 +85,18 @@ app.post('/api/auth/login', async (req, res) => {
 }
 })
 
+//ITEM POST
+app.post('/api/items', async (req, res, next) => {
+  try{
+    const { name, quantity, location, price, imgUrl, description, type, sellerId } = req.body;
+    const newPost = await createItem(name, quantity, location, price, imgUrl, description, type, sellerId)
+    res.send('done')
+  } catch(err) {
+    res.send(err.message);
+  }
+})
+
+
 //USER REGISTRATION
 app.post('/api/auth/register', async (req, res, next) => {
   try{
