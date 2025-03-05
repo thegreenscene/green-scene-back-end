@@ -13,7 +13,12 @@ const createUser = async (userName, password, userLocation) => {
     `);
 
     const createdUser = rows[0];
-    return createdUser;
+    if (createdUser) {
+      const registerToken = await jwt.sign({id: createdUser.id}, process.env.SECRET);
+      return registerToken;
+    } else {
+      throw new Error('Error created user.');
+    }
 }
 
 const loginUser = async (inputUser, inputPassword) => {

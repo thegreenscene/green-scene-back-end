@@ -71,6 +71,18 @@ app.post('/api/auth/login', async (req, res) => {
   res.send(err.message);
 }
 })
+
+//USER REGISTRATION
+app.post('/api/auth/register', async (req, res, next) => {
+  try{
+    const { username, password, location } = req.body; 
+    const registeredUserToken = await createUser(username, password, location);
+    res.send({token: registeredUserToken});
+  } catch (err) {
+    res.send(err.message);
+  }
+})
+
 //ADD TO CART
 app.post('/api/user/cart', async (req, res) => {
   try {
@@ -98,16 +110,6 @@ app.delete('/api/user/cart', async (req, res) => {
     res.status(200).send('Order Deleted!');
   }catch (error) {
     res.send(error.message);
-  }
-})
-
-app.post('/api/auth/register', async (req, res, next) => {
-  try{
-    const { username, password, location } = req.body; 
-    const registeredUser = await createUser(username, password, location);
-    res.send(`${registeredUser.username} created successfully.`);
-  } catch (err) {
-    res.send(err.message);
   }
 })
 
