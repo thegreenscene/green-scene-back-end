@@ -25,6 +25,19 @@ const fetchCart = async(userId) => {
   }
 }
 
+
+const fetchOrders = async(userId) => {
+  try {
+    const {rows} = await client.query(`
+      SELECT * FROM orders;
+    `);
+    return rows;
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+
 const updateOrder = async(orderId, status) => {
   try {
     const {rows} = await client.query(`
@@ -56,5 +69,6 @@ module.exports = {
   createOrder,
   fetchCart,
   updateOrder,
-  deleteOrder
+  deleteOrder,
+  fetchOrders
 }

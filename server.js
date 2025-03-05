@@ -1,6 +1,6 @@
 const { createItem, fetchItems, typeFetch, oneItem } = require('./db/items.js');
 const { loginUser, validateUser, createUser } = require('./db/users.js');
-const { createOrder, fetchCart, updateOrder, deleteOrder} = require('./db/orders.js');
+const { createOrder, fetchCart, updateOrder, deleteOrder, fetchOrders} = require('./db/orders.js');
 const { fetchReviews } = require('./db/reviews.js');
 
 const client = require('./db/client.js');
@@ -73,6 +73,21 @@ app.get('/api/reviews', async(req, res) => {
     res.send(err.message);
   }
 });
+//ALL ORDERS//
+app.get('/api/orders', async(req, res) => {
+  try {
+    const orders = await fetchOrders();
+    if (orders === undefined || orders.length == 0) {
+      res.send('No Orders Found');
+    }else{
+      res.send(orders);
+    }
+  } catch(err) {
+    res.send(err.message);
+  }
+});
+
+
 //     POST Requests      //
 //USER LOGIN 
 app.post('/api/auth/login', async (req, res) => {
