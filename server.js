@@ -99,8 +99,11 @@ app.post('/api/auth/register', async (req, res, next) => {
 //ADD TO CART
 app.post('/api/user/cart', async (req, res) => {
   try {
+    console.log(req.body);
     const {itemId, quantity, token} = req.body;
+    console.log('here');
     const userData = await validateUser(token);
+    console.log('there');
     const order = await createOrder(itemId, userData.id, quantity);
     if(order){
       res.status(201).send(order);
