@@ -1,6 +1,7 @@
 const { createItem, fetchItems, typeFetch, oneItem } = require('./db/items.js');
 const { loginUser, validateUser, createUser } = require('./db/users.js');
 const { createOrder, fetchCart, updateOrder, deleteOrder} = require('./db/orders.js');
+const { fetchReviews } = require('./db/reviews.js');
 
 const client = require('./db/client.js');
 client.connect();
@@ -59,7 +60,19 @@ app.get('/api/items/:id', async(req, res) => {
     res.send(err.message);
   }
 });
-
+//ALL REVIEWS//
+app.get('/api/reviews', async(req, res) => {
+  try {
+    const allReviews = await fetchReviews();
+    if (allReviews === undefined || allReviews.length == 0) {
+      res.send('No Reviews Found');
+    }else{
+      res.send(allReviews);
+    }
+  } catch(err) {
+    res.send(err.message);
+  }
+});
 //     POST Requests      //
 //USER LOGIN 
 app.post('/api/auth/login', async (req, res) => {
