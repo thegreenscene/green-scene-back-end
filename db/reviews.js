@@ -11,4 +11,15 @@ const createReview = async(itemId, reviewTitle, reviewDescription, reviewRating)
   }
 }
 
-module.exports = { createReview }
+const fetchReviews = async() => {
+  try {
+    const {rows} = await client.query(`
+      SELECT * FROM items;
+    `);
+    return rows;
+  } catch (error) {
+    throw new Error('Bad Fetch')
+  }
+}
+
+module.exports = { createReview, fetchReviews }
